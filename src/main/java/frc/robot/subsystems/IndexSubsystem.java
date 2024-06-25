@@ -31,9 +31,6 @@ public class IndexSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("indexer/Right sensor enabled", true);
 
     }
-    public static IndexSubsystem instance() {
-        return instance();
-    }
 
     public boolean haveNote() {
         return (SmartDashboard.getBoolean("indexer/Left sensor enabled", true) && !leftIndexSensor.get()) ||
