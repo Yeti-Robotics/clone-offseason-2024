@@ -14,6 +14,16 @@ public class IndexSubsystem extends SubsystemBase {
     private final DigitalInput rightIndexSensor = new DigitalInput(FeederConstants.rightIndexSensorID);
     private boolean haveNote = false;
 
+    public enum IndexerState {
+        EJECT,
+        BREAK,
+        SOFTFEED,
+        FEED,
+        INDEX
+    }
+
+    private IndexerState currentState = IndexerState.BREAK;
+
     public IndexSubsystem() {
 
         var indexConfiguration = new TalonFXConfiguration();
@@ -40,20 +50,37 @@ public class IndexSubsystem extends SubsystemBase {
 
 
     public void feed() {
-        indexMotor.set(FeederConstants.FEEDSPEED);
+        setState(IndexerState.FEED);
     }
     public void index() {
-        indexMotor.set(FeederConstants.INDEXSPEED);
+        setState(IndexerState.INDEX);
     }
     public void softfeed() {
-        indexMotor.set(FeederConstants.SOFTFEEDSPEED);
+        setState(IndexerState.SOFTFEED);
     }
     public void stop() {
-        indexMotor.set(FeederConstants.BREAKSPEED);
+        setState(IndexerState.BREAK);
     }
     public void eject() {
-        indexMotor.set(FeederConstants.EJECTSPEED);
+        setState(IndexerState.EJECT);
     }
+
+    public IndexerState getCurrentState() {
+        return currentState;
+    }
+    private void setState(IndexerState indexerState) {
+        switch (indexerState) {
+            case FEED -> indexMotor.set(FeederConstants.FEEDSPEED);
+            case INDEX -> indexMotor.set(FeederConstants.INDEXSPEED);
+            case EJECT -> indexMotor.set(FeederConstants.EJECTSPEED);
+            case SOFTFEED -> indexMotor.set(FeederConstants.SOFTFEEDSPEED);
+            case BREAK -> indexMotor.set(FeederConstants.BREAKSPEED);
+        }
+        currentState = indexerState;
+    }
+
+
+
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("indexer/Have note", haveNote);
