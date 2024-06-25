@@ -16,7 +16,6 @@ public class FeederConstants {
     public static final double EJECTSPEED = -1.00;
     public static final double BREAKSPEED = 0.00;
     /* Timer Values */
-    public static final double PAUSETOSHOOTSPEED = 0.75;
     /* Motor Config Values */
     public static final double peakForwardVoltage = 12.0;
     public static final double peakReverseVoltage = -12.0;
