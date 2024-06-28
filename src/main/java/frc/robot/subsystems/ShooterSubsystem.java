@@ -46,18 +46,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
         }
 
-
-        void setShooterSpeed(double topSpeed, double bottomSpeed) {
-            //if (this != SPEAKER && this != SHUTTLE) {
-            throw new Error("Can't set dynamic speed for non-vision shots.");
-        }
-    }
-
-    //set motor speed
-    public void setSpeed(ShooterSpeed speedState) {
-        if (speedState == ShooterSpeed.SPEAKER || speedState == ShooterSpeed.SHUTTLE) {
-            speedState.setShooterSpeed(0, 0);
-            //TODO: get vision values
+        public void setShooterSpeed(double topSpeed, double bottomSpeed) {
+            top.set(topSpeed);
+            bottom.set(bottomSpeed);
         }
     }
 }
