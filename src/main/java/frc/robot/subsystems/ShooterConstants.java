@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
 public class ShooterConstants {
+
+    public static final int TOP_SHOOTER_MOTOR_ID = 1;
+    public static final int BOTTOM_SHOOTER_MOTOR_ID = 2;
     public static final double STOP_SPEED = 0.0;
 
     //placeholders from here on out
