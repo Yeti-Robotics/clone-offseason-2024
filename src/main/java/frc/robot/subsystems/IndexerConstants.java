@@ -3,7 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-public class FeederConstants {
+public class IndexerConstants {
     public static final int indexMotorID = 13; //Change based on ID
     public static final int leftIndexSensorID = 0; //Change based on ID
     public static final int rightIndexSensorID = 1; //Change based on ID
@@ -12,7 +12,7 @@ public class FeederConstants {
     /* Motor Speed Values */
     public static final double INDEXSPEED = 0.80;
     public static final double FEEDSPEED = 1.00;
-    public static final double SOFTFEEDSPEED = 0.25;
+
     public static final double EJECTSPEED = -1.00;
     public static final double BREAKSPEED = 0.00;
     /* Timer Values */
