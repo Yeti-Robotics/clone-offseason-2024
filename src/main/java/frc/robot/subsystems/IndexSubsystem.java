@@ -9,15 +9,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IndexSubsystem extends SubsystemBase {
     private final static IndexSubsystem INSTANCE = null;
-    private final TalonFX indexMotor = new TalonFX(FeederConstants.indexMotorID, FeederConstants.indexMotorCanBus);
-    private final DigitalInput leftIndexSensor = new DigitalInput(FeederConstants.leftIndexSensorID);
-    private final DigitalInput rightIndexSensor = new DigitalInput(FeederConstants.rightIndexSensorID);
+    private final TalonFX indexMotor = new TalonFX(IndexerConstants.indexMotorID, IndexerConstants.indexMotorCanBus);
+    private final DigitalInput leftIndexSensor = new DigitalInput(IndexerConstants.leftIndexSensorID);
+    private final DigitalInput rightIndexSensor = new DigitalInput(IndexerConstants.rightIndexSensorID);
     private boolean haveNote = false;
 
     public enum IndexerState {
         EJECT,
         BREAK,
-        SOFTFEED,
         FEED,
         INDEX
     }
@@ -27,10 +26,10 @@ public class IndexSubsystem extends SubsystemBase {
     public IndexSubsystem() {
 
         var indexConfiguration = new TalonFXConfiguration();
-        indexConfiguration.MotorOutput.NeutralMode = FeederConstants.motorNeutralValue;
-        indexConfiguration.MotorOutput.Inverted = FeederConstants.motorOutputInverted;
-        indexConfiguration.Voltage.PeakForwardVoltage = FeederConstants.peakForwardVoltage;
-        indexConfiguration.Voltage.PeakReverseVoltage = FeederConstants.peakReverseVoltage;
+        indexConfiguration.MotorOutput.NeutralMode = IndexerConstants.motorNeutralValue;
+        indexConfiguration.MotorOutput.Inverted = IndexerConstants.motorOutputInverted;
+        indexConfiguration.Voltage.PeakForwardVoltage = IndexerConstants.peakForwardVoltage;
+        indexConfiguration.Voltage.PeakReverseVoltage = IndexerConstants.peakReverseVoltage;
         indexMotor.getConfigurator().apply(indexConfiguration);
 
     }
@@ -43,9 +42,7 @@ public class IndexSubsystem extends SubsystemBase {
     }
 
     public boolean haveNote() {
-        return (SmartDashboard.getBoolean("indexer/Left sensor enabled", true) && !leftIndexSensor.get()) ||
-        (SmartDashboard.getBoolean("indexer/Right sensor enabled", true) && !rightIndexSensor.get());
-
+        return leftIndexSensor.get() && rightIndexSensor.get();
     }
 
 
@@ -54,9 +51,6 @@ public class IndexSubsystem extends SubsystemBase {
     }
     public void index() {
         setState(IndexerState.INDEX);
-    }
-    public void softfeed() {
-        setState(IndexerState.SOFTFEED);
     }
     public void stop() {
         setState(IndexerState.BREAK);
@@ -70,11 +64,10 @@ public class IndexSubsystem extends SubsystemBase {
     }
     private void setState(IndexerState indexerState) {
         switch (indexerState) {
-            case FEED -> indexMotor.set(FeederConstants.FEEDSPEED);
-            case INDEX -> indexMotor.set(FeederConstants.INDEXSPEED);
-            case EJECT -> indexMotor.set(FeederConstants.EJECTSPEED);
-            case SOFTFEED -> indexMotor.set(FeederConstants.SOFTFEEDSPEED);
-            case BREAK -> indexMotor.set(FeederConstants.BREAKSPEED);
+            case FEED -> indexMotor.set(IndexerConstants.FEEDSPEED);
+            case INDEX -> indexMotor.set(IndexerConstants.INDEXSPEED);
+            case EJECT -> indexMotor.set(IndexerConstants.EJECTSPEED);
+            case BREAK -> indexMotor.set(IndexerConstants.BREAKSPEED);
         }
         currentState = indexerState;
     }
