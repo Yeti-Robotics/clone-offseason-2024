@@ -4,7 +4,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class IndexerConstants {
-    public static final int INDEX_MOTOR_ID = 5; //Change based on ID
+    public static final int INDEX_MOTOR_ID = 5;
     public static final int LEFT_INDEX_SENSOR_ID = 0; //Change based on ID
     public static final int RIGHT_INDEX_SENSOR_ID = 1; //Change based on ID
 
