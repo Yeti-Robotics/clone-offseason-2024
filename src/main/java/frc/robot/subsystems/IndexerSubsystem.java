@@ -6,11 +6,12 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.IndexerConstants;
 
-public class IndexSubsystem extends SubsystemBase {
-    private final TalonFX indexMotor = new TalonFX(IndexerConstants.indexMotorID, IndexerConstants.indexMotorCanBus);
-    private final DigitalInput leftIndexSensor = new DigitalInput(IndexerConstants.leftIndexSensorID);
-    private final DigitalInput rightIndexSensor = new DigitalInput(IndexerConstants.rightIndexSensorID);
+public class IndexerSubsystem extends SubsystemBase {
+    private final TalonFX indexMotor = new TalonFX(IndexerConstants.INDEX_MOTOR_ID, IndexerConstants.INDEX_MOTOR_CANBUS);
+    private final DigitalInput leftIndexSensor = new DigitalInput(IndexerConstants.LEFT_INDEX_SENSOR_ID);
+    private final DigitalInput rightIndexSensor = new DigitalInput(IndexerConstants.RIGHT_INDEX_SENSOR_ID);
 
     public enum IndexerState {
         EJECT,
@@ -21,12 +22,12 @@ public class IndexSubsystem extends SubsystemBase {
 
     private IndexerState currentState = IndexerState.BREAK;
 
-    public IndexSubsystem() {
+    public IndexerSubsystem() {
         var indexConfiguration = new TalonFXConfiguration();
-        indexConfiguration.MotorOutput.NeutralMode = IndexerConstants.motorNeutralValue;
-        indexConfiguration.MotorOutput.Inverted = IndexerConstants.motorOutputInverted;
-        indexConfiguration.Voltage.PeakForwardVoltage = IndexerConstants.peakForwardVoltage;
-        indexConfiguration.Voltage.PeakReverseVoltage = IndexerConstants.peakReverseVoltage;
+        indexConfiguration.MotorOutput.NeutralMode = IndexerConstants.MOTOR_NEUTRAL_VALUE;
+        indexConfiguration.MotorOutput.Inverted = IndexerConstants.MOTOR_OUTPUT_INVERTED;
+        indexConfiguration.Voltage.PeakForwardVoltage = IndexerConstants.PEAK_FORWARD_VOLTAGE;
+        indexConfiguration.Voltage.PeakReverseVoltage = IndexerConstants.PEAK_REVERSE_VOLTAGE;
         indexMotor.getConfigurator().apply(indexConfiguration);
     }
 
@@ -62,10 +63,10 @@ public class IndexSubsystem extends SubsystemBase {
 
     private void setState(IndexerState indexerState) {
         switch (indexerState) {
-            case FEED -> indexMotor.set(IndexerConstants.FEEDSPEED);
-            case INDEX -> indexMotor.set(IndexerConstants.INDEXSPEED);
-            case EJECT -> indexMotor.set(IndexerConstants.EJECTSPEED);
-            case BREAK -> indexMotor.set(IndexerConstants.BREAKSPEED);
+            case FEED -> indexMotor.set(IndexerConstants.FEED_SPEED);
+            case INDEX -> indexMotor.set(IndexerConstants.INDEX_SPEED);
+            case EJECT -> indexMotor.set(IndexerConstants.EJECT_SPEED);
+            case BREAK -> indexMotor.set(IndexerConstants.BREAK_SPEED);
         }
         currentState = indexerState;
     }

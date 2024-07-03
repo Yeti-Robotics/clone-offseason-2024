@@ -6,6 +6,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
     private final TalonFX intakeMotor = new TalonFX(IntakeConstants.INTAKE_MOTOR_ID, "canivoreBus");
