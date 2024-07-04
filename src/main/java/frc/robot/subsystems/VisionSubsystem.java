@@ -80,7 +80,8 @@ public class VisionSubsystem extends SubsystemBase {
                                 1,
                                 2,
                                 1,
-                                Units.degreesToRadians(speakertarget.getPitch()));
+                                Math.toRadians(speakertarget.getPitch())
+                        );
 
       }
     }
