@@ -1,7 +1,7 @@
 package frc.robot.constants;
 
 public class IntakeConstants {
-    public static final int INTAKE_MOTOR_ID = 1;
+    public static final int INTAKE_MOTOR_ID = 14;
     public static final int INTAKE_BEAMBREAK_CHANNEL = 0;
 
     public static final double INTAKE_MOTOR_INTAKE_SPEED = 0.3;
