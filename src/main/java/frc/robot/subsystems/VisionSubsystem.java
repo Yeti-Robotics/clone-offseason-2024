@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,68 +21,72 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.PhotonUtils;
+import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 
 
 public class VisionSubsystem extends SubsystemBase {
-
+    //Output variables:
     Pose3d currentPose;
-
     double range;
 
+    //Initializing Photonvision camera:
     PhotonCamera camera = new PhotonCamera("photonvision");
     AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
     Transform3d robotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0,0,0)); //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
+
     // Construct PhotonPoseEstimator
-    PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camera, robotToCam);
+    PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, robotToCam);
+
+    //Initializing variables:
+    Optional<EstimatedRobotPose> estimatedPoseOpt;
+    PhotonPipelineResult result;
+    List<PhotonTrackedTarget> targets;
+    double targetID;
+    PhotonTrackedTarget speakerTarget;
+
     public Pose3d getCurrentPose()
     {
-       
         return currentPose;
     }
 
-    public double CheckDistanceFromSpeaker()
+    public double getDistanceFromSpeaker()
     {
-       
         return range;
-        
-        
     }
 
     @Override
     public void periodic() {
-       Optional<EstimatedRobotPose> estimatedPoseOpt =  photonPoseEstimator.update();//update
+        //Finding current pose:
+        estimatedPoseOpt =  photonPoseEstimator.update();//Update the current pose.
 
-        if (estimatedPoseOpt.isPresent()) {//if update worked new current pose
+        if (estimatedPoseOpt.isPresent()) {//If the update worked send it to 'currentPose'.
             currentPose = estimatedPoseOpt.get().estimatedPose;
         }
 
+        //Finding speaker distance:
+        result = camera.getLatestResult();
 
-        var result = camera.getLatestResult();
-        boolean hasTargets = result.hasTargets();
+        if(result.hasTargets())
+        {
+        speakerTarget = null;
 
-        if(hasTargets == true){
-            
-        
-        List<PhotonTrackedTarget> targets = result.getTargets();
-        int target_size = targets.size();
-        int targetID;
-        PhotonTrackedTarget speakertarget = null;
-        for (int i = 0; i < target_size; i++) {
-           PhotonTrackedTarget current_target = targets.get(i);
-            targetID = current_target.getFiducialId();
-            if(targetID == 11){
-                speakertarget = targets.get(i);
+        for (PhotonTrackedTarget currentTarget : result.getTargets()) {
+            targetID = currentTarget.getFiducialId();
+            if(targetID == Constants.VisionConstants.speakerTargetID){
+                speakerTarget = currentTarget;
             }
         }
-        double range =
-                        PhotonUtils.calculateDistanceToTargetMeters(
-                                1,
-                                2,
-                                1,
-                                Math.toRadians(speakertarget.getPitch())
-                        );
+
+        if(speakerTarget != null){
+            range = PhotonUtils.calculateDistanceToTargetMeters(
+                    Constants.VisionConstants.cameraHeight,
+                    Constants.VisionConstants.targetHeight,
+                    Constants.VisionConstants.cameraPitch,
+                    Math.toRadians(speakerTarget.getPitch())
+                    );
+        }
 
       }
     }
