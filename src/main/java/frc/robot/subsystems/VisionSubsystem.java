@@ -34,7 +34,10 @@ public class VisionSubsystem extends SubsystemBase {
     //Initializing Photonvision camera:
     PhotonCamera camera = new PhotonCamera("photonvision");
     AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
-    Transform3d robotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0,0,0)); //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
+        Transform3d robotToCam = 
+        new Transform3d(new Translation3d(Constants.VisionConstants.cameraX, Constants.VisionConstants.cameraY, Constants.VisionConstants.cameraZ), 
+        new Rotation3d(Constants.VisionConstants.cameraRoll,Constants.VisionConstants.cameraPitch,Constants.VisionConstants.cameraYaw)); 
+        //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
 
     // Construct PhotonPoseEstimator
     PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, robotToCam);
