@@ -42,12 +42,6 @@ public class VisionSubsystem extends SubsystemBase {
     // Construct PhotonPoseEstimator
     PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, robotToCam);
 
-    //Initializing variables:
-    Optional<EstimatedRobotPose> estimatedPoseOpt;
-    PhotonPipelineResult result;
-    List<PhotonTrackedTarget> targets;
-    double targetID;
-    PhotonTrackedTarget speakerTarget;
 
     public Pose3d getCurrentPose()
     {
@@ -62,37 +56,34 @@ public class VisionSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         //Finding current pose:
-        estimatedPoseOpt =  photonPoseEstimator.update();//Update the current pose.
+        Optional<EstimatedRobotPose> estimatedPoseOpt =  photonPoseEstimator.update();//Update the current pose.
 
-        if (estimatedPoseOpt.isPresent()) {//If the update worked send it to 'currentPose'.
+        if (estimatedPoseOpt.isPresent()) //If the update worked send it to 'currentPose'.
+        {
             currentPose = estimatedPoseOpt.get().estimatedPose;
         }
 
         //Finding speaker distance:
-        result = camera.getLatestResult();
+        PhotonPipelineResult result = camera.getLatestResult();
+
 
         if(result.hasTargets())
         {
-        speakerTarget = null;
 
-        for (PhotonTrackedTarget currentTarget : result.getTargets()) {
-            targetID = currentTarget.getFiducialId();
-            if(targetID == Constants.VisionConstants.speakerTargetID){
-                speakerTarget = currentTarget;
+            for (PhotonTrackedTarget currentTarget : result.getTargets())
+            {
+                if(currentTarget.getFiducialId() == Constants.VisionConstants.speakerTargetID)
+                {
+                    range = PhotonUtils.calculateDistanceToTargetMeters(
+                            Constants.VisionConstants.cameraHeight,
+                            Constants.VisionConstants.targetHeight,
+                            Constants.VisionConstants.cameraPitch,
+                            Math.toRadians(currentTarget.getPitch())
+                    );
+                }
             }
         }
-
-        if(speakerTarget != null){
-            range = PhotonUtils.calculateDistanceToTargetMeters(
-                    Constants.VisionConstants.cameraHeight,
-                    Constants.VisionConstants.targetHeight,
-                    Constants.VisionConstants.cameraPitch,
-                    Math.toRadians(speakerTarget.getPitch())
-                    );
-        }
-
-      }
-    }
+}
 
 
 
