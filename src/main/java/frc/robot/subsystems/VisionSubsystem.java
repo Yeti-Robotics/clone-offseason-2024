@@ -67,7 +67,13 @@ public class VisionSubsystem extends SubsystemBase {
         PhotonPipelineResult result = camera.getLatestResult();
 
 
-        if(result.hasTargets())
+if (!result.hasTargets()) {
+    return;
+}
+
+for (PhotonTrackedTarget currentTarget : result.getTargets()) {
+ // ...
+}
         {
 
             for (PhotonTrackedTarget currentTarget : result.getTargets())
