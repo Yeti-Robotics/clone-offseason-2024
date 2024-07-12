@@ -13,10 +13,24 @@ package frc.robot;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants
-{
-    public static class OperatorConstants
-    {
+public final class Constants {
+    public static class OperatorConstants {
         public static final int DRIVER_CONTROLLER_PORT = 0;
+    }
+
+    public static class VisionConstants {
+        public static final int speakerTargetID = 11;
+        public static final int cameraHeight = 1;
+        public static final int targetHeight = 1;
+        public static final int cameraPitchRadians = 1;
+
+        public static final double cameraX = 0.5;
+        public static final double cameraY = 0.0;
+        public static final double cameraZ = 0.5;
+
+        public static final double cameraRoll = 0.0;
+        public static final double cameraPitch = 0.0;
+        public static final double cameraYaw = 0.0;
+
     }
 }
